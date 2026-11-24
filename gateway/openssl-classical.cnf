@@ -1,0 +1,12 @@
+# Classical-only baseline: no post-quantum groups offered.
+openssl_conf = openssl_init
+
+[openssl_init]
+ssl_conf = ssl_sect
+
+[ssl_sect]
+system_default = system_default_sect
+
+[system_default_sect]
+MinProtocol = TLSv1.3
+Groups = X25519:secp256r1

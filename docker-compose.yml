@@ -1,0 +1,76 @@
+# Three gateways (classical / hybrid / pure-PQC) in front of ONE broker and ONE
+# backend, so every comparison in the report uses identical upstreams.
+#
+#   host ports   classical  hybrid  pqc
+#   MQTT/TLS       8883     8884    8885
+#   HTTPS          8443     8444    8445
+#
+# Constrained-device emulation: edge containers get small CPU / RAM limits.
+# Override with e.g.  GW_CPUS=1 EDGE_CPUS=0.1 docker compose up
+
+x-gateway: &gateway
+  build: ./gateway
+  image: pqc-iot-gateway:latest
+  depends_on: [mosquitto, backend]
+  volumes:
+    - ./certs:/certs:ro
+  command: ["--cert", "/certs/server.crt", "--key", "/certs/server.key",
+            "--map", "8883=mosquitto:1883", "--map", "8443=backend:8000",
+            "--stats-interval", "2"]
+  cpus: "${GW_CPUS:-1.0}"
+  mem_limit: "${GW_MEM:-256m}"
+  networks: [iot]
+
+services:
+  mosquitto:
+    image: eclipse-mosquitto:2
+    volumes:
+      - ./broker/mosquitto.conf:/mosquitto/config/mosquitto.conf:ro
+    networks: [iot]
+
+  backend:
+    image: python:3.13-slim-trixie
+    volumes:
+      - ./backend:/app:ro
+    command: ["python", "/app/http_backend.py"]
+    networks: [iot]
+
+  gateway-classical:
+    <<: *gateway
+    container_name: gateway-classical
+    environment: { GATEWAY_PROFILE: classical }
+    ports: ["8883:8883", "8443:8443"]
+
+  gateway-hybrid:
+    <<: *gateway
+    container_name: gateway-hybrid
+    environment: { GATEWAY_PROFILE: hybrid }
+    ports: ["8884:8883", "8444:8443"]
+
+  gateway-pqc:
+    <<: *gateway
+    container_name: gateway-pqc
+    environment: { GATEWAY_PROFILE: pqc }
+    ports: ["8885:8883", "8445:8443"]
+
+  # Simulated constrained edge node. Not started by `up`; use `make bench`
+  # or: docker compose run --rm edge python /app/edge/edge_node.py --help
+  edge:
+    build: ./edge
+    image: pqc-iot-edge:latest
+    profiles: ["edge"]
+    depends_on: [gateway-classical, gateway-hybrid, gateway-pqc]
+    volumes:
+      - ./certs:/certs:ro
+      - ./edge:/app/edge:ro
+      - ./bench:/app/bench:ro
+      - ./analysis:/app/analysis:ro
+      - ./results:/app/results
+    environment:
+      CA_FILE: /certs/ca.crt
+    cpus: "${EDGE_CPUS:-0.25}"
+    mem_limit: "${EDGE_MEM:-64m}"
+    networks: [iot]
+
+networks:
+  iot: {}

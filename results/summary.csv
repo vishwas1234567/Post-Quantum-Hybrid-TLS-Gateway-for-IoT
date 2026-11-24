@@ -1,0 +1,4 @@
+profile,n,group,openssl,lat_mean_ms,lat_median_ms,lat_p95_ms,lat_p99_ms,lat_stdev_ms,client_cpu_ms_per_hs,client_maxrss_kb,client_hello_bytes,c2s_bytes,s2c_bytes,total_bytes,handshakes_per_s,gw_cpu_ms_per_hs,gw_rss_kb,gw_peak_rss_kb
+classical,150,x25519,OpenSSL 3.5.9 29 Sep 2026,1.431,1.325,1.806,3.689,0.488,1.485,22048,232,317,884,1201,464.1,1.161,26672,26672
+hybrid,150,X25519MLKEM768,OpenSSL 3.5.9 29 Sep 2026,1.557,1.544,1.808,2.004,0.184,1.578,22108,1416,1501,1972,3473,419.5,1.355,27000,27000
+pqc,150,MLKEM768,OpenSSL 3.5.9 29 Sep 2026,1.349,1.345,1.584,1.811,0.183,1.177,22216,1374,1459,1941,3400,515.5,1.226,26864,26864

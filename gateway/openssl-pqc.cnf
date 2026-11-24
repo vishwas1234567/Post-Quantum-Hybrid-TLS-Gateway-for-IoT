@@ -1,0 +1,13 @@
+# Pure post-quantum key exchange: ML-KEM-768 only, NO classical fallback.
+# Clients that do not support ML-KEM fail the handshake (that is the point).
+openssl_conf = openssl_init
+
+[openssl_init]
+ssl_conf = ssl_sect
+
+[ssl_sect]
+system_default = system_default_sect
+
+[system_default_sect]
+MinProtocol = TLSv1.3
+Groups = MLKEM768

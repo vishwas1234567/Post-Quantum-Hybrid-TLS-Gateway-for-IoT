@@ -1,0 +1,15 @@
+# Hybrid: X25519 + ML-KEM-768 (IANA codepoint 0x11EC), classical fallback kept
+# so legacy nodes can still connect during migration.
+# With oqs-provider instead of native OpenSSL 3.5, load it here:
+#   [provider_sect] default = default_sect / oqsprovider = oqs_sect
+openssl_conf = openssl_init
+
+[openssl_init]
+ssl_conf = ssl_sect
+
+[ssl_sect]
+system_default = system_default_sect
+
+[system_default_sect]
+MinProtocol = TLSv1.3
+Groups = X25519MLKEM768:X25519

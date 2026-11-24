@@ -1,0 +1,26 @@
+\begin{tabular}{llrrrr}
+\toprule
+Algorithm & Operation & Mean (\textmu s) & Public key (B) & Ciphertext/sig (B) & \\
+\midrule
+ML-KEM-768 & keygen & 161.8 & 1184 & 1088 & \\
+ML-KEM-768 & encaps & 38.3 & 1184 & 1088 & \\
+ML-KEM-768 & decaps & 53.4 & 1184 & 1088 & \\
+ML-KEM-1024 & keygen & 139.5 & 1568 & 1568 & \\
+ML-KEM-1024 & encaps & 32.2 & 1568 & 1568 & \\
+ML-KEM-1024 & decaps & 46.6 & 1568 & 1568 & \\
+ML-DSA-44 & keygen & 109.4 & 1312 & 2420 & \\
+ML-DSA-44 & sign & 591.3 & 1312 & 2420 & \\
+ML-DSA-44 & verify & 120.9 & 1312 & 2420 & \\
+ML-DSA-65 & keygen & 192.7 & 1952 & 3309 & \\
+ML-DSA-65 & sign & 972.6 & 1952 & 3309 & \\
+ML-DSA-65 & verify & 180.6 & 1952 & 3309 & \\
+ML-DSA-87 & keygen & 278.6 & 2592 & 4627 & \\
+ML-DSA-87 & sign & 1191.0 & 2592 & 4627 & \\
+ML-DSA-87 & verify & 294.0 & 2592 & 4627 & \\
+X25519 & keygen & 35.0 & 32 & 32 & \\
+X25519 & exchange & 37.8 & 32 & 32 & \\
+ECDSA-P256 & keygen & 15.9 & 65 & 71 & \\
+ECDSA-P256 & sign & 29.6 & 65 & 71 & \\
+ECDSA-P256 & verify & 84.1 & 65 & 71 & \\
+\bottomrule
+\end{tabular}
